@@ -3,94 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modern Quote Ticker</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Playfair+Display:ital,wght@1,500&display=swap" rel="stylesheet">
+    <title>Premium Quote Ticker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;800&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --accent-blue: #007aff; /* Apple-style modern blue */
-            --text-main: #1d1d1f;
-            --bg-white: #ffffff;
-        }
-
         body {
             margin: 0;
             padding: 0;
-            background-color: #f5f5f7;
-        }
-
-        /* The Slim Header Bar */
-        .ticker-wrap {
-            width: 100%;
-            height: 60px;
-            background-color: var(--bg-white);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Inter', sans-serif;
-            border-bottom: 1px solid rgba(0,0,0,0.08);
-            position: relative;
+            background-color: #ffffff;
             overflow: hidden;
         }
 
+        .ticker-wrap {
+            width: 100%;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Montserrat', sans-serif;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
         .quote-container {
+            position: relative;
+            width: 100%;
             height: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 100%;
-            max-width: 900px;
         }
 
         .quote-text {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.15rem;
-            color: var(--text-main);
             position: absolute;
-            opacity: 0;
-            transform: translateY(20px) scale(0.98);
-            transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+            font-size: 1rem;
+            font-weight: 300;
+            color: #444;
+            letter-spacing: 0.03em;
             text-align: center;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            opacity: 0;
+            transform: scale(0.95);
+            transition: all 0.9s cubic-bezier(0.23, 1, 0.32, 1);
+            width: 90%;
         }
 
-        /* Modern Stylized Quotation Marks */
-        .quote-text::before, .quote-text::after {
-            content: '"';
-            font-family: 'Playfair Display', serif;
-            color: var(--accent-blue);
-            font-size: 2rem;
-            opacity: 0.3;
-            line-height: 0;
-            margin-top: 15px;
+        /* Bold Blue Words */
+        .accent {
+            color: #0066ff;
+            font-weight: 800;
+            letter-spacing: -0.01em;
+            text-transform: uppercase; /* Makes the blue words look like a punchy callout */
+            font-size: 0.95rem;
+            margin: 0 4px;
         }
 
         .quote-text.active {
             opacity: 1;
-            transform: translateY(0) scale(1);
+            transform: scale(1);
         }
 
         .quote-text.exit {
             opacity: 0;
-            transform: translateY(-20px) scale(0.98);
+            transform: scale(1.05);
         }
 
-        /* Bold Accent Styling */
-        .accent {
-            font-family: 'Inter', sans-serif;
-            color: var(--accent-blue);
-            font-weight: 700;
-            font-style: normal; /* Removes italic from the bold blue words */
-            letter-spacing: -0.02em;
+        /* Minimalist Quote Marks */
+        .mark {
+            color: #0066ff;
+            opacity: 0.2;
+            font-weight: 800;
+            font-size: 1.4rem;
+            margin: 0 10px;
         }
     </style>
 </head>
 <body>
 
     <div class="ticker-wrap">
-        <div class="quote-container" id="container">
-            </div>
+        <div class="quote-container" id="container"></div>
     </div>
 
     <script>
@@ -114,7 +102,7 @@
         quotes.forEach((q, i) => {
             const div = document.createElement('div');
             div.className = 'quote-text';
-            div.innerHTML = q;
+            div.innerHTML = `<span class="mark">/</span>${q}<span class="mark">/</span>`;
             container.appendChild(div);
         });
 
@@ -124,22 +112,15 @@
         function cycle() {
             const prev = current;
             current = (current + 1) % elements.length;
-
             elements[prev].classList.remove('active');
             elements[prev].classList.add('exit');
-            
             elements[current].classList.remove('exit');
             elements[current].classList.add('active');
-
-            setTimeout(() => {
-                elements[prev].classList.remove('exit');
-            }, 800);
+            setTimeout(() => { elements[prev].classList.remove('exit'); }, 900);
         }
 
-        // Init
         elements[0].classList.add('active');
         setInterval(cycle, 5000);
     </script>
-
 </body>
 </html>
