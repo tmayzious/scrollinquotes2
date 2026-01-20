@@ -3,54 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Motivational Quote Ticker</title>
+    <title>Slim Quote Ticker</title>
     <style>
-        :root {
-            --bg-color: #ffffff;
-            --text-color: #1e272e;
-            --accent-color: #38ada9;
-        }
-
         body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
             margin: 0;
-            background-color: var(--bg-color);
-            font-family: 'Georgia', serif;
+            padding: 0;
         }
 
-        .quote-box {
-            text-align: center;
-            padding: 40px;
-            max-width: 700px;
-            min-height: 150px;
+        /* The Slim Header Bar */
+        .ticker-wrap {
+            width: 100%;
+            height: 40px;
+            background-color: #1e272e; /* Dark professional background */
+            color: #ffffff;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            border-bottom: 1px solid #34e7e4; /* Thin accent bottom border */
         }
 
-        #quote-display {
-            font-size: 1.8rem;
-            line-height: 1.4;
-            color: var(--text-color);
-            transition: opacity 0.8s ease-in-out;
+        .quote-container {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            width: 100%;
+        }
+
+        .quote-text {
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+            position: absolute;
             opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.6s ease-in-out;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding: 0 20px;
         }
 
-        .fade-in { opacity: 1 !important; }
+        .quote-text.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
 
-        .line {
-            width: 50px;
-            height: 3px;
-            background-color: var(--accent-color);
-            margin: 20px auto;
+        .quote-text.exit {
+            opacity: 0;
+            transform: translateY(-10px);
         }
     </style>
 </head>
 <body>
 
-    <div class="quote-box">
-        <div id="quote-display">Initial quote loading...</div>
-        <div class="line"></div>
+    <div class="ticker-wrap">
+        <div class="quote-container" id="container">
+            </div>
     </div>
 
     <script>
@@ -59,37 +70,49 @@
             "Believe you can and you're halfway there.",
             "It does not matter how slowly you go as long as you do not stop.",
             "Everything you've ever wanted is on the other side of fear.",
-            "Success is not final, failure is not fatal: it is the courage to continue that counts.",
-            "Hardships often prepare ordinary people for an extraordinary destiny.",
-            "The future belongs to those who believe in the beauty of their dreams.",
+            "Success is not final, failure is not fatal.",
+            "Hardships often prepare people for an extraordinary destiny.",
+            "The future belongs to those who believe in their dreams.",
             "Don’t watch the clock; do what it does. Keep going.",
             "You miss 100% of the shots you don’t take.",
-            "Whether you think you can or you think you can’t, you’re right.",
+            "Whether you think you can or can’t, you’re right.",
             "Act as if what you do makes a difference. It does.",
             "Quality is not an act, it is a habit."
         ];
 
-        let index = 0;
-        const display = document.getElementById('quote-display');
+        const container = document.getElementById('container');
+        
+        // Create elements
+        quotes.forEach((q, i) => {
+            const div = document.createElement('div');
+            div.className = 'quote-text';
+            div.textContent = q;
+            container.appendChild(div);
+        });
 
-        function updateQuote() {
-            // Fade out
-            display.classList.remove('fade-in');
+        const elements = document.querySelectorAll('.quote-text');
+        let current = 0;
 
+        function cycle() {
+            const prev = current;
+            current = (current + 1) % elements.length;
+
+            // Handle classes for animation
+            elements[prev].classList.remove('active');
+            elements[prev].classList.add('exit');
+            
+            elements[current].classList.remove('exit');
+            elements[current].classList.add('active');
+
+            // Reset the 'exit' class after animation finishes
             setTimeout(() => {
-                // Change text
-                display.textContent = `"${quotes[index]}"`;
-                // Fade in
-                display.classList.add('fade-in');
-                // Move to next index
-                index = (index + 1) % quotes.length;
-            }, 800); 
+                elements[prev].classList.remove('exit');
+            }, 600);
         }
 
-        // Run immediately
-        updateQuote();
-        // Change every 5 seconds
-        setInterval(updateQuote, 5000);
+        // Initialize first quote
+        elements[0].classList.add('active');
+        setInterval(cycle, 4000); // Change every 4 seconds
     </script>
 
 </body>
