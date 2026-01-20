@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slim Quote Ticker</title>
+    <title>Clean Quote Ticker</title>
     <style>
         body {
             margin: 0;
@@ -13,15 +13,16 @@
         /* The Slim Header Bar */
         .ticker-wrap {
             width: 100%;
-            height: 40px;
-            background-color: #1e272e; /* Dark professional background */
-            color: #ffffff;
+            height: 60px; /* Requested height */
+            background-color: #ffffff;
+            color: #2d3436;
             overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            border-bottom: 1px solid #34e7e4; /* Thin accent bottom border */
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            border-bottom: 1px solid #e0e0e0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
 
         .quote-container {
@@ -34,16 +35,13 @@
         }
 
         .quote-text {
-            font-size: 0.9rem;
-            letter-spacing: 0.5px;
+            font-size: 1.1rem;
             position: absolute;
             opacity: 0;
-            transform: translateY(10px);
-            transition: all 0.6s ease-in-out;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            padding: 0 20px;
+            transform: translateY(15px);
+            transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+            text-align: center;
+            width: 90%;
         }
 
         .quote-text.active {
@@ -53,7 +51,13 @@
 
         .quote-text.exit {
             opacity: 0;
-            transform: translateY(-10px);
+            transform: translateY(-15px);
+        }
+
+        /* The Blue Bold Style */
+        .accent {
+            color: #0984e3;
+            font-weight: 700;
         }
     </style>
 </head>
@@ -65,28 +69,28 @@
     </div>
 
     <script>
+        // List of quotes with <span class="accent"> around key words
         const quotes = [
-            "The only way to do great work is to love what you do.",
-            "Believe you can and you're halfway there.",
-            "It does not matter how slowly you go as long as you do not stop.",
-            "Everything you've ever wanted is on the other side of fear.",
-            "Success is not final, failure is not fatal.",
-            "Hardships often prepare people for an extraordinary destiny.",
-            "The future belongs to those who believe in their dreams.",
-            "Don’t watch the clock; do what it does. Keep going.",
-            "You miss 100% of the shots you don’t take.",
-            "Whether you think you can or can’t, you’re right.",
-            "Act as if what you do makes a difference. It does.",
-            "Quality is not an act, it is a habit."
+            "The only way to do <span class='accent'>great work</span> is to love what you do.",
+            "Believe you can and you're <span class='accent'>halfway there</span>.",
+            "It does not matter how <span class='accent'>slowly you go</span> as long as you do not stop.",
+            "Everything you've ever wanted is on the <span class='accent'>other side</span> of fear.",
+            "Success is <span class='accent'>not final</span>, failure is not fatal.",
+            "Hardships often prepare people for an <span class='accent'>extraordinary</span> destiny.",
+            "The future belongs to those who <span class='accent'>believe</span> in their dreams.",
+            "Don’t watch the clock; <span class='accent'>keep going</span>.",
+            "You miss <span class='accent'>100%</span> of the shots you don’t take.",
+            "Whether you think you can or can’t, <span class='accent'>you’re right</span>.",
+            "Act as if what you do <span class='accent'>makes a difference</span>.",
+            "Quality is not an act, it is a <span class='accent'>habit</span>."
         ];
 
         const container = document.getElementById('container');
         
-        // Create elements
         quotes.forEach((q, i) => {
             const div = document.createElement('div');
             div.className = 'quote-text';
-            div.textContent = q;
+            div.innerHTML = q; // Using innerHTML to render the <span> tags
             container.appendChild(div);
         });
 
@@ -97,22 +101,20 @@
             const prev = current;
             current = (current + 1) % elements.length;
 
-            // Handle classes for animation
             elements[prev].classList.remove('active');
             elements[prev].classList.add('exit');
             
             elements[current].classList.remove('exit');
             elements[current].classList.add('active');
 
-            // Reset the 'exit' class after animation finishes
             setTimeout(() => {
                 elements[prev].classList.remove('exit');
-            }, 600);
+            }, 700);
         }
 
-        // Initialize first quote
+        // Init
         elements[0].classList.add('active');
-        setInterval(cycle, 4000); // Change every 4 seconds
+        setInterval(cycle, 5000); // 5 seconds per quote
     </script>
 
 </body>
